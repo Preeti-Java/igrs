@@ -71,8 +71,8 @@ public class IgrsUserDetails implements UserDetailsService{
 				throw new UnauthorizedException(USER_ID_DISABLED_EXCEPTION + username);
 			}
 			
-			return new org.springframework.security.core.userdetails.User(users.getMobileNo(), users.getLogonPassword(),
-					status, true, true, true, getAuthorities(users.getRolesAccessBeans()));
+			return new IgrsUser(users.getMobileNo(), users.getLogonPassword(),
+					status, true, true, getAuthorities(users.getRolesAccessBeans()),users.getUserId());
 			
 	}
 	

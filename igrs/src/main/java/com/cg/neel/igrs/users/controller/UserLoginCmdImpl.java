@@ -11,12 +11,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cg.neel.igrs.exceptions.UnauthorizedException;
 import com.cg.neel.igrs.users.LoginRequest;
+import com.cg.neel.igrs.users.UserRegAccessBean;
+import com.cg.neel.igrs.users.configuration.IgrsUser;
 import com.cg.neel.igrs.users.configuration.IgrsUserDetails;
 import com.cg.neel.igrs.users.jwtconfiguration.JwtTokenGeneratorFilter;
 import com.cg.neel.igrs.utils.GenericResponse;
@@ -62,7 +64,7 @@ public class UserLoginCmdImpl implements UserLoginCmd{
 	  	authenticate(loginRequest.getMobileNo(), loginRequest.getPassword());
 		  
 		  //Send language English and Hindi Locale locale = request.getLocale(); final
-		  UserDetails userDetails = igrsUserDetails.loadUserByUsername(loginRequest.getMobileNo());
+		  IgrsUser userDetails = igrsUserDetails.loadUserByUsername(loginRequest.getMobileNo());
 		  
 		  //check password is matched or not
 		 boolean isMatchPasswordFlag =  igrsUserDetails.matchPassword(loginRequest.getPassword(), userDetails.getPassword());

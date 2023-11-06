@@ -14,8 +14,10 @@ import java.util.Set;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
+
+import com.cg.neel.igrs.users.configuration.IgrsUser;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -33,7 +35,7 @@ public class JwtTokenGeneratorFilter  {
 	// Generate Token for User
 	// JWT Token contains -> header, payload, signature
 	// Update in future
-	public String generateToken(UserDetails userDetails) {
+	public String generateToken(IgrsUser userDetails) {
 		return doGenerateToken(new HashMap<>(), userDetails);
 	}
 
@@ -43,8 +45,10 @@ public class JwtTokenGeneratorFilter  {
 	 * @return
 	 */
 
-	private String doGenerateToken(Map<String, Object> claims, UserDetails userDetails) {
-		return Jwts.builder().setIssuer("New IGRS").setSubject("JWT Token").claim("username", userDetails.getUsername())
+	private String doGenerateToken(Map<String, Object> claims, IgrsUser userDetails) {
+		return Jwts.builder().setIssuer("New IGRS").setSubject("JWT Token")
+				.claim("username", userDetails.getUsername())
+				.claim("userId", userDetails.getUserId() )
 				.claim("authorities", populateAuthoritirs(userDetails.getAuthorities()))
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000)) //1 hr

@@ -12,7 +12,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -52,7 +52,7 @@ public class IgrsUserDetails implements UserDetailsService{
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
+	public IgrsUser loadUserByUsername(final String username) throws UsernameNotFoundException {
 		
 			UserRegAccessBean users= this.userRegRepository.findByMobileNo(username);
 			if(users == null)
@@ -72,7 +72,7 @@ public class IgrsUserDetails implements UserDetailsService{
 			}
 			
 			return new IgrsUser(users.getMobileNo(), users.getLogonPassword(),
-					status, true, true, getAuthorities(users.getRolesAccessBeans()),users.getUserId());
+					true, true, true, status, getAuthorities(users.getRolesAccessBeans()),users.getUserId());
 			
 	}
 	

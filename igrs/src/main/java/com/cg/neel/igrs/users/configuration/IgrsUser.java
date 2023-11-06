@@ -8,6 +8,8 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
+import com.cg.neel.igrs.users.UserRegAccessBean;
+
 /**
  * 
  */
@@ -27,26 +29,12 @@ public class IgrsUser extends User{
 	
 	public IgrsUser(String username, String password, boolean enabled, boolean accountNonExpired,
 			boolean credentialsNonExpired, boolean accountNonLocked,
-			Collection<? extends GrantedAuthority> authorities) {
+			Collection<? extends GrantedAuthority> authorities,Long userId) {
 		super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
-		
-	}
-
-	/**
-	 * @param mobileNo
-	 * @param logonPassword
-	 * @param enabled
-	 * @param accountNonExpired
-	 * @param credentialsNonExpired
-	 * @param authorities
-	 * @param userId
-	 */
-	public IgrsUser(String mobileNo, String logonPassword, boolean enabled, boolean accountNonExpired,
-			boolean credentialsNonExpired, Collection<? extends GrantedAuthority> authorities, Long userId) {
-		super(mobileNo, logonPassword, enabled, accountNonExpired, credentialsNonExpired,  credentialsNonExpired, authorities);
 		this.userId = userId;
 	}
 
+	
 	@Override
 	public Collection<GrantedAuthority> getAuthorities() {
 		return super.getAuthorities();

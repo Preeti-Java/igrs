@@ -49,50 +49,49 @@ public class SecurityConfig {
 	
 	 
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.securityContext((context) -> context
+	 SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.securityContext((context) -> context
                 .requireExplicitSave(false))
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
-            @Override
-            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-                CorsConfiguration config = new CorsConfiguration();
-                config.setAllowedOrigins(Arrays.asList("http://localhost:4200","http://localhost","http://localhost:4201"));
-                config.setAllowedMethods(Collections.singletonList("*"));
-                config.setAllowCredentials(true);
-                config.setAllowedHeaders(Collections.singletonList("*"));
-                config.setMaxAge(3600L);
-                return config;
-            }
-        }))
-		 	.csrf().disable() 
-          .csrf()
-          .disable()
-         // .sessionManagement()
-        //  .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-         // .and()
-		 .addFilterBefore(new JwtTokenValidatorFilter(), BasicAuthenticationFilter.class)
-          .authorizeHttpRequests()
-          .antMatchers(HttpMethod.GET,
-        		  "/health",
-        		  "/user/registration",
-        		  "/verify/mobileVerification",
-        		  "/login/user",
-        		  "/header/default",
-        		  "/header/menu",//Update in Future For GHOST Dashboard
-        		  "/header/submenu",//Update in Future For GHOST Dashboard
-        		 "/menu/searchSubMenu",
-        		 "/pass/reset"
-        		
-        		  )
-          .permitAll()
-          .antMatchers(
-        		  "/header/dashboard",
-        		 "/updateCred/uPass"
-        		  )
-          .authenticated().and()
-          .exceptionHandling().authenticationEntryPoint((request, response, authException) ->
-                      response.sendError(HttpServletResponse.SC_UNAUTHORIZED));
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
+                    @Override
+                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                        CorsConfiguration config = new CorsConfiguration();
+                        config.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://localhost", "http://localhost:4201"));
+                        config.setAllowedMethods(Collections.singletonList("*"));
+                        config.setAllowCredentials(true);
+                        config.setAllowedHeaders(Collections.singletonList("*"));
+                   //     config.setExposedHeaders(Arrays.asList("Authorization"));
+                        config.setMaxAge(3600L);
+                        return config;
+                    }
+                }))
+                .csrf(csrf -> csrf.disable())
+                // .sessionManagement()
+                //  .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                // .and()
+                .addFilterBefore(new JwtTokenValidatorFilter(), BasicAuthenticationFilter.class)
+                .authorizeHttpRequests()
+                .antMatchers(HttpMethod.GET,
+                        "/health",
+                        "/user/registration",
+                        "/verify/mobileVerification",
+                        "/login/user",
+                        "/header/default",
+                        "/header/menu",//Update in Future For GHOST Dashboard
+                        "/header/submenu",//Update in Future For GHOST Dashboard
+                        "/menu/searchSubMenu",
+                        "/pass/reset"
+
+                )
+                .permitAll()
+                .antMatchers(
+                        "/header/dashboard",
+                        "/updateCred/uPass"
+                )
+                .authenticated().and()
+                .exceptionHandling(handling -> handling.authenticationEntryPoint((request, response, authException) ->
+                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED)));
 
       return http.build();
 	}
